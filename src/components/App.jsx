@@ -1,40 +1,46 @@
 import React, { useState } from "react";
 import Heading from "./Heading";
+import Input from "./Input";
+import TodoItem from "./TodoItem";
+
+
+
 function App(){
 
-    const [newItem, setNewItem] = useState("")
     const [item, setItem] = useState([])
 
-    function handleChange(event){
-        const note = event.target.value
-        setNewItem(note)    
-    }
-
-    function Additem(){
-        setItem( (prevItem)=>{
+    function Additem(newItem){
+      setItem( (prevItem)=>{
               return[
                 ...prevItem,
                 newItem
               ]
         })
-        setNewItem("")
     }
+      const deleteItem = (id)=>{
+        console.log(id);
+        setItem((prevItem)=>{
+         return  prevItem.filter((item, index)=>{
+              return index !==id
+          })
+        })
+      }
 
     return(
         <div className="container">
           
             <Heading/>
-           <div className="form">
-              <input onChange={handleChange} type="text" name="note" value={newItem}/>
-            
-              <button onClick={Additem}>
-                <span>Add</span>
-             </button>
-            
-            </div>
+    
+              <Input 
+                onAdd={Additem}
+                addSpan="Add"
+            />
+                   
             <div>
                 <ul>
-                    {item.map(todoItem => <li>{todoItem}</li> )}
+                    {item.map((todoItem,index) => 
+                      <TodoItem key={index} id={index} list={todoItem} onChecked={deleteItem} /> 
+                      )}
                 </ul>
             </div>
         </div>  
